@@ -8,7 +8,7 @@ class App extends Component {
 
   componentDidMount() {
     this.setState({ 'users': [] });
-    axios.get(`http://localhost:5000/bachelor_data`)
+    axios.get(`http://ec2-13-57-211-196.us-west-1.compute.amazonaws.com:3000/update`)
       .then(res => {
         this.setState({ "users": res.data });
       });
