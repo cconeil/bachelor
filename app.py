@@ -7,7 +7,7 @@ from models.models import Contestant
 import os
 
 app = Flask(__name__, static_url_path='/website/build/')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db.db.init_app(app)
 
 migrate = Migrate(app, db.db)
@@ -48,3 +48,6 @@ def return_everything():
         })
 
     return jsonify(results)
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=80)
