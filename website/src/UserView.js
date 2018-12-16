@@ -3,11 +3,10 @@ import { LineChart, Line, Tooltip, YAxis, XAxis, ResponsiveContainer } from 'rec
 
 function UserView(props) {
     const user = props.user;
-    const data = props.data;
-    const link = "https://www.instagram.com/" + user.instagram + "/"
+    const dataPoints = user.data_points;
 
-    const hasInsta = user.instagram.length > 0;
-    const hasFollowerData = user.data_points && user.data_points.length > 0;
+    const hasInsta = user.insta && user.insta.length > 0;
+    const hasFollowerData = dataPoints && dataPoints.length > 0;
 
     return (
         <div className="user-view">
@@ -21,8 +20,8 @@ function UserView(props) {
                     </p>
                     {hasInsta && 
                         <p className="user-handle">
-                            <a href={link}>
-                                {"@" + user.instagram}
+                            <a href={"https://www.instagram.com/" + user.insta + "/"}>
+                                {"@" + user.insta}
                             </a>
                         </p>
                     }
@@ -31,17 +30,17 @@ function UserView(props) {
             {hasFollowerData && 
                 <div className="follower-count">
                     <span>Followers: </span>
-                    <span>{data[data.length - 1].followers}</span>
+                    <span>{dataPoints[dataPoints.length - 1].num_followers}</span>
                 </div>
             }
             {hasFollowerData &&
                 <div className="chart-view">
                     <ResponsiveContainer width='100%' height={250}>
                         <LineChart 
-                            data={data}
+                            data={dataPoints}
                             margin={{ top: 5, right: 5, bottom: 5, left: 5 }}
                         >
-                            <Line type="monotone" dataKey="followers" stroke="#8884d8" />
+                            <Line type="monotone" dataKey="num_followers" stroke="#8884d8" />
                             <YAxis 
                                 type="number" 
                                 domain={['dataMin', 'dataMax']} 
@@ -52,7 +51,7 @@ function UserView(props) {
                                 hide={true}
                             />
                             <XAxis 
-                                dataKey="name" 
+                                dataKey="timestamp" 
                                 padding={{right: 30}}
                                 axisLine={false}
                                 tickLine={false}
