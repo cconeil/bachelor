@@ -1,9 +1,13 @@
+from flask_script import Manager
 import requests
 import time
 import datetime
-
 from models.models import Contestant, FollowerCountDataPoint
 from models.db import db
+
+from app import app
+
+manager = Manager(app)
 
 account_id = 17841404349966033
 token = 'EAAEeR6ST3pkBADSdXZBWIDsl9e0GbmKkN8wEd2iAbRmBAvECmoziS1wk2SMrgBsVWPCZCod01t9pBpQpjVvgzCDsoRrvZCFCynfc7dpskTSaztGQK6ZBkZAmBgQq1NxBhgZAXZBgMbA5PjzZCNxrsFqJvd5LldubIq4ZD'
@@ -19,7 +23,7 @@ def _get_follower_count(username):
         print('error', e)
         return None
 
-
+@manager.command
 def update_follower_counts():
     contestants = Contestant.query.all()
 
@@ -34,5 +38,6 @@ def update_follower_counts():
 
     db.session.commit()
 
+if __name__ == "__main__":
+    manager.run()
 
-update_follower_counts()
