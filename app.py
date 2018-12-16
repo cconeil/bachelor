@@ -32,7 +32,7 @@ def return_everything():
         for data_point in contestant.data_points:
             data_points.append({
                 "id": data_point.id,
-                "num_followers": data_point.num_followers,
+                "num_followers": int(data_point.num_followers),
                 "timestamp": data_point.timestamp,
                 "contestant_id": data_point.contestant_id,
             })
@@ -46,8 +46,12 @@ def return_everything():
             "is_slops_crew": contestant.is_slops_crew,
             "data_points": data_points
         })
+    results_with_followers = [result for result in results if len(result["data_points"])]
+    sorted_results_with_followers = sorted(results_with_followers, key=lambda x: x["data_points"][-1]["num_followers"], reverse=True)
+    results_without_followers = [result for result in results if not len(result["data_points"])]
+    sorted_results_without_followers = sorted(results_without_followers, key=lambda x: x["name"])
+    return jsonify(sorted_results_with_followers + sorted_results_without_followers)
 
-    return jsonify(results)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=80)
