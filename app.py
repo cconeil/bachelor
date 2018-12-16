@@ -19,4 +19,26 @@ def hello_world():
 @app.route('/update/')
 def return_everything():
     contestants = Contestant.query.all()
-    return jsonify(contestants)
+
+    results = []
+    for contestant in contestants:
+        data_points = []
+        for data_point in contestant.data_points:
+            data_points.append({
+                "id": data_point.id,
+                "num_followers": data_point.num_followers,
+                "timestamp": data_point.timestamp,
+                "contestant_id": data_point.contestant_id,
+            })
+
+        results.append({
+            "id": contestant.id,
+            "name": contestant.name,
+            "insta": contestant.insta,
+            "image_url": contestant.image_url,
+            "elimated_date": contestant.elimated_date,
+            "is_slops_crew": contestant.is_slops_crew,
+            "data_points": data_points
+        })
+
+    return jsonify(results)
