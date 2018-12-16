@@ -1,19 +1,25 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, send_from_directory
 from flask_migrate import Migrate
 
 from models import db
 from models.models import Contestant
 
-app = Flask(__name__)
+import os
+
+app = Flask(__name__, static_url_path='/website/build/')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
 db.db.init_app(app)
 
 migrate = Migrate(app, db.db)
 
 
-@app.route('/')
-def hello_world():
-    return 'Hello all users!'
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve(path):
+    if path != "" and os.path.exists("website/build/" + path):
+        return send_from_directory('website/build', path)
+    else:
+        return send_from_directory('website/build', 'index.html')
 
 
 @app.route('/update/')
