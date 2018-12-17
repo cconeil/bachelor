@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, send_from_directory
 from flask_migrate import Migrate
+from flask_cors import CORS
 
 from models import db
 from models.models import Contestant
@@ -8,10 +9,10 @@ import os
 
 app = Flask(__name__, static_url_path='/website/build/')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+CORS(app)
 db.db.init_app(app)
 
 migrate = Migrate(app, db.db)
-
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
