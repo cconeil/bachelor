@@ -2,4 +2,4 @@ __pycache__/
 venv
 *.pyc
 website/node_modules/
-
+logs/
