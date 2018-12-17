@@ -3,6 +3,13 @@ div, p {
   padding: 0;
 }
 
+h1 {
+  width: 80%;
+  margin-left: 10%;
+  font-weight: 300;
+  margin-bottom: 60px;
+}
+
 .user-view {
   display: flex;
   flex-direction: column;
