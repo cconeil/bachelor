@@ -41,6 +41,9 @@ def return_everything():
                 "contestant_id": data_point.contestant_id,
             })
 
+        last_week_timestamp = datetime.now() - timedelta(days=7)
+        yesterday_timestamp = datetime.now() - timedelta(days=1)
+
         results.append({
             "id": contestant.id,
             "name": contestant.name,
@@ -49,7 +52,8 @@ def return_everything():
             "elimated_date": contestant.elimated_date,
             "is_slops_crew": contestant.is_slops_crew,
             "data_points": data_points,
-            "delta_since_last_week": _delta_since_last_week(data_points),
+            "delta_since_last_week": _delta_since(data_points, last_week_timestamp),
+            "delta_since_yesterday": _delta_since(data_points, yesterday_timestamp)
         })
     results_with_followers = [result for result in results if len(result["data_points"])]
     sorted_results_with_followers = sorted(results_with_followers, key=lambda x: x["data_points"][-1]["num_followers"], reverse=True)
@@ -58,16 +62,14 @@ def return_everything():
     return jsonify(sorted_results_with_followers + sorted_results_without_followers)
 
 
-def _delta_since_last_week(data_points):
+def _delta_since(data_points, since_timestamp):
     if not len(data_points):
         return None
 
-    one_week_ago = datetime.now() - timedelta(days=7)
     first_data_point = data_points[-1]
     last_data_point = None
     for data_point in reversed(data_points):
-        print(one_week_ago)
-        if data_point["timestamp"] < one_week_ago:
+        if data_point["timestamp"] < since_timestamp:
             last_data_point = data_point
             break
 
