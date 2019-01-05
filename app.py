@@ -10,8 +10,10 @@ from models.models import Contestant
 
 import os
 
+DB_FILENAME = "test.db"
+
 app = Flask(__name__, static_url_path='/website/build/')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///{}'.format(DB_FILENAME)
 CORS(app)
 db.db.init_app(app)
 

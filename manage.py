@@ -55,9 +55,9 @@ def load_insta():
     instagram = Instagram()
     instagram.load_site()
 
-if __name__ == "__main__":
-    manager.run()
-
 @manager.command
 def backup_db():
     shutil.copyfile(DB_FILENAME, BACKUP_DIRECTORY + DB_FILENAME)
+
+if __name__ == "__main__":
+    manager.run()
