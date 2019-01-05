@@ -3,3 +3,7 @@ venv
 *.pyc
 website/node_modules/
 logs/
+chromedriver
+bovada.pem
+connect.sh
+.vscode/
