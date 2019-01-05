@@ -66,7 +66,8 @@ def _delta_since_last_week(data_points):
     first_data_point = data_points[-1]
     last_data_point = None
     for data_point in reversed(data_points):
-        if data_point.timestamp < one_week_ago:
+        print(one_week_ago)
+        if data_point["timestamp"] < one_week_ago:
             last_data_point = data_point
             break
 
@@ -74,7 +75,7 @@ def _delta_since_last_week(data_points):
         return None
 
     return (
-        int(first_data_point.num_followers) - int(last_data_point.num_followers)
+        int(first_data_point["num_followers"]) - int(last_data_point["num_followers"])
     )
 
 
