@@ -1,3 +1,5 @@
+import shutil
+
 from flask_script import Manager
 import requests
 import time
@@ -6,14 +8,14 @@ from models.models import Contestant, FollowerCountDataPoint
 from models.db import db
 from clients.instagram import Instagram
 
-from app import app
+from app import app, DB_FILENAME
 
 manager = Manager(app)
 
 account_id = 17841404349966033
 token = 'EAAEeR6ST3pkBADSdXZBWIDsl9e0GbmKkN8wEd2iAbRmBAvECmoziS1wk2SMrgBsVWPCZCod01t9pBpQpjVvgzCDsoRrvZCFCynfc7dpskTSaztGQK6ZBkZAmBgQq1NxBhgZAXZBgMbA5PjzZCNxrsFqJvd5LldubIq4ZD'
 url = "https://graph.facebook.com/v3.2/{}?fields=business_discovery.username({})%7Bfollowers_count%2Cmedia_count%7D&access_token={}"
-
+BACKUP_DIRECTORY = "../backups/bachelor/"
 
 def _get_follower_count(username, instagram):
     try:
@@ -55,3 +57,6 @@ def load_insta():
 if __name__ == "__main__":
     manager.run()
 
+@manager.command
+def backup_db():
+    shutil.copyfile(DB_FILENAME, BACKUP_DIRECTORY + DB_FILENAME)
