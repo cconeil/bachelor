@@ -1,4 +1,5 @@
 import shutil
+from datetime import datetime
 
 from flask_script import Manager
 import requests
@@ -57,7 +58,10 @@ def load_insta():
 
 @manager.command
 def backup_db():
-    shutil.copyfile(DB_FILENAME, BACKUP_DIRECTORY + DB_FILENAME)
+    backup_filename = (
+        BACKUP_DIRECTORY + "backup_{}.db".format(str(datetime.now()))
+    )
+    shutil.copyfile(DB_FILENAME, backup_filename)
 
 if __name__ == "__main__":
     manager.run()
