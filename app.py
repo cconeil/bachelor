@@ -1,3 +1,6 @@
+from datetime import datetime
+from datetime import timedelta
+
 from flask import Flask, jsonify, send_from_directory
 from flask_migrate import Migrate
 from flask_cors import CORS
@@ -45,13 +48,34 @@ def return_everything():
             "image_url": contestant.image_url,
             "elimated_date": contestant.elimated_date,
             "is_slops_crew": contestant.is_slops_crew,
-            "data_points": data_points
+            "data_points": data_points,
+            "delta_since_last_week": _delta_since_last_week(data_points),
         })
     results_with_followers = [result for result in results if len(result["data_points"])]
     sorted_results_with_followers = sorted(results_with_followers, key=lambda x: x["data_points"][-1]["num_followers"], reverse=True)
     results_without_followers = [result for result in results if not len(result["data_points"])]
     sorted_results_without_followers = sorted(results_without_followers, key=lambda x: x["name"])
     return jsonify(sorted_results_with_followers + sorted_results_without_followers)
+
+
+def _delta_since_last_week(data_points):
+    if not len(data_points):
+        return None
+
+    one_week_ago = datetime.now() - timedelta(days=7)
+    first_data_point = data_points[-1]
+    last_data_point = None
+    for data_point in reversed(data_points):
+        if data_point.timestamp < one_week_ago:
+            last_data_point = data_point
+            break
+
+    if last_data_point is None:
+        return None
+
+    return (
+        int(first_data_point.num_followers) - int(last_data_point.num_followers)
+    )
 
 
 if __name__ == "__main__":
