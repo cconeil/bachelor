@@ -7,7 +7,7 @@ h1 {
   width: 80%;
   margin-left: 10%;
   font-weight: 300;
-  margin-bottom: 60px;
+  margin-bottom: 20px;
 }
 
 .user-view {
@@ -64,10 +64,35 @@ h1 {
 }
 
 .follower-count {
-  margin-bottom: 40px;
+  margin-bottom: 5px;
   font-size: 20px;
 }
 
 .chart-view {
 
+}
+
+.follower-delta {
+  margin-bottom: 20px;
+}
+
+.follower-delta span {
+  margin-right: 3px;
+}
+
+.follower-delta .up {
+  color: green;
+}
+
+.follower-delta .down {
+  color: red;
+}
+
+.date-selector {
+  margin-left: 10%;
+  margin-bottom: 40px;
+}
+
+.date-selector a {
+  margin-right: 20px;
 }

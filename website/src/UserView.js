@@ -33,6 +33,22 @@ function UserView(props) {
                     <span>{dataPoints[dataPoints.length - 1].num_followers}</span>
                 </div>
             }
+            {user.delta &&
+                <div className="follower-delta">
+                    {user.delta > 0 &&
+                        <div className="up">
+                            <span>Up</span>
+                            <span>{user.delta}</span>
+                        </div>
+                    }
+                    {user.delta < 0 &&
+                        <div className="down">
+                            <span>Down</span>
+                            <span>{user.delta}</span>
+                        </div>
+                    }
+                </div>
+            }
             {hasFollowerData &&
                 <div className="chart-view">
                     <ResponsiveContainer width='100%' height={250}>
@@ -45,7 +61,6 @@ function UserView(props) {
                                 type="number" 
                                 domain={['dataMin', 'dataMax']} 
                                 orientation="right" 
-                                // padding={{ top: , bottom: 20, left: 20 }}
                                 axisLine={false}
                                 tickLine={false}
                                 hide={true}

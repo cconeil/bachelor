@@ -31,9 +31,10 @@ def return_everything():
     contestants = Contestant.query.all()
 
     results = []
+
     for contestant in contestants:
         data_points = []
-        for data_point in contestant.data_points:
+        for data_point in filtered_points(contestant.data_points, 'week'):
             data_points.append({
                 "id": data_point.id,
                 "num_followers": int(data_point.num_followers),
@@ -49,8 +50,9 @@ def return_everything():
             "elimated_date": contestant.elimated_date,
             "is_slops_crew": contestant.is_slops_crew,
             "data_points": data_points,
-            "delta_since_last_week": _delta_since_last_week(data_points),
+            "delta": _delta(data_points),
         })
+
     results_with_followers = [result for result in results if len(result["data_points"])]
     sorted_results_with_followers = sorted(results_with_followers, key=lambda x: x["data_points"][-1]["num_followers"], reverse=True)
     results_without_followers = [result for result in results if not len(result["data_points"])]
@@ -58,25 +60,36 @@ def return_everything():
     return jsonify(sorted_results_with_followers + sorted_results_without_followers)
 
 
-def _delta_since_last_week(data_points):
-    if not len(data_points):
-        return None
-
-    one_week_ago = datetime.now() - timedelta(days=7)
-    first_data_point = data_points[-1]
-    last_data_point = None
-    for data_point in reversed(data_points):
-        if data_point.timestamp < one_week_ago:
-            last_data_point = data_point
-            break
-
-    if last_data_point is None:
+def _delta(data_points):
+    if len(data_points) < 2:
         return None
 
     return (
-        int(first_data_point.num_followers) - int(last_data_point.num_followers)
+        int(data_points[-1]['num_followers']) - int(data_points[0]['num_followers'])
     )
 
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=80)
+
+
+def filtered_points(data_points, filters):
+    now = datetime.now()
+    one_day_ago = now - timedelta(days=1)
+    one_week_ago = now - timedelta(days=7)
+    one_month_ago = now - timedelta(days=30)
+
+    filtered_data_points = []
+
+    for data_point in data_points:
+        time = data_point.timestamp
+        if filters == 'day' and time > one_day_ago and time < now:
+            filtered_data_points.append(data_point)
+        elif filters == 'week' and time > one_week_ago and time < now and time.hour == 4:
+            filtered_data_points.append(data_point)
+        elif filters == 'month' and time > one_month_ago and time < now and time.hour == 4:
+            filtered_data_points.append(data_point)
+        elif filters == 'all' and time.hour == 4:
+            filtered_data_points.append(data_point)
+    
+    return filtered_data_points
