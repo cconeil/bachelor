@@ -11,10 +11,17 @@ class App extends Component {
 
   componentDidMount() {
     this.setState({ 'users': [] });
-    axios.get(`http://www.thebachelorgram.com/update/`)
-      .then(res => {
-        this.setState({ "users": res.data });
-      });
+    this.loadData('week')()
+  }
+
+  loadData(date_filter) {
+    var that = this;
+    return function() {
+      axios.get(`http://localhost:5000/update/?filter=` + date_filter)
+        .then(res => {
+          that.setState({ "users": res.data });
+        });
+      }
   }
 
   render() {
@@ -29,6 +36,11 @@ class App extends Component {
     return (
       <div className="App">
         <h1>Bachelor Insta Followers</h1>
+        <div className="date-selector">
+          <a onClick={this.loadData('day')}>Day</a>
+          <a onClick={this.loadData('week')}>Week</a>
+          <a onClick={this.loadData('month')}>Month</a>
+        </div>
         <div className="user-container">
           {users.map(function(user, i){
             return <UserView 

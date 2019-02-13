@@ -15,6 +15,7 @@ manager = Manager(app)
 account_id = 17841404349966033
 token = 'EAAEeR6ST3pkBADSdXZBWIDsl9e0GbmKkN8wEd2iAbRmBAvECmoziS1wk2SMrgBsVWPCZCod01t9pBpQpjVvgzCDsoRrvZCFCynfc7dpskTSaztGQK6ZBkZAmBgQq1NxBhgZAXZBgMbA5PjzZCNxrsFqJvd5LldubIq4ZD'
 url = "https://graph.facebook.com/v3.2/{}?fields=business_discovery.username({})%7Bfollowers_count%2Cmedia_count%7D&access_token={}"
+
 BACKUP_DIRECTORY = "../backups/bachelor/"
 DB_FILENAME = "test.db"
 
