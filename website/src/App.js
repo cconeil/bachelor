@@ -17,7 +17,7 @@ class App extends Component {
   loadData(date_filter) {
     var that = this;
     return function() {
-      axios.get(`http://localhost:5000/update/?filter=` + date_filter)
+      axios.get(`http://www.thebachelorgram.com/update/?filter=` + date_filter)
         .then(res => {
           that.setState({ "users": res.data });
         });
