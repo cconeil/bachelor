@@ -27,6 +27,19 @@ def serve(path):
     else:
         return send_from_directory('website/build', 'index.html')
 
+@app.route('/followers/')
+def get_followers():
+    contestants = Contestant.query.all()
+    instagrams = request.args['instagrams'].split(',')
+
+    filtered_contestants = [contestant for contestant in contestants if contestant.instagram in instagrams]
+
+    payload = {}
+    for contestant in filtered_contestants:
+        payload[contestant.instagram] = contestant.data_points[-1].num_followers
+    
+    return jsonify(payload)
+
 
 @app.route('/update/')
 def return_everything():
@@ -97,6 +110,6 @@ def _filtered_points(data_points, filters):
     return filtered_data_points
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=80)
+    app.run(host="localhost", port=3000)
 
 
