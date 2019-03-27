@@ -1,7 +1,7 @@
 from datetime import datetime
 from datetime import timedelta
 
-from flask import Flask, jsonify, send_from_directory
+from flask import Flask, jsonify, send_from_directory, request
 from flask_migrate import Migrate
 from flask_cors import CORS
 
@@ -31,12 +31,15 @@ def serve(path):
 @app.route('/update/')
 def return_everything():
     contestants = Contestant.query.all()
+    filters = request.args['filter']
+    if filters == None:
+        filters = 'week'
 
     results = []
 
     for contestant in contestants:
         data_points = []
-        for data_point in filtered_points(contestant.data_points, 'week'):
+        for data_point in _filtered_points(contestant.data_points, filters):
             data_points.append({
                 "id": data_point.id,
                 "num_followers": int(data_point.num_followers),
@@ -64,7 +67,6 @@ def return_everything():
     sorted_results_without_followers = sorted(results_without_followers, key=lambda x: x["name"])
     return jsonify(sorted_results_with_followers + sorted_results_without_followers)
 
-
 def _delta(data_points):
     if len(data_points) < 2:
         return None
@@ -73,12 +75,7 @@ def _delta(data_points):
         int(data_points[-1]['num_followers']) - int(data_points[0]['num_followers'])
     )
 
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=80)
-
-
-def filtered_points(data_points, filters):
+def _filtered_points(data_points, filters):
     now = datetime.now()
     one_day_ago = now - timedelta(days=1)
     one_week_ago = now - timedelta(days=7)
@@ -98,3 +95,8 @@ def filtered_points(data_points, filters):
             filtered_data_points.append(data_point)
     
     return filtered_data_points
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=80)
+
+
